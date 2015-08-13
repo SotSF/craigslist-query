@@ -4,11 +4,14 @@ var fs = require('fs'),
     _ = require('underscore'),
     scrape = require('scrapeit'),
     dateformat = require('dateformat'),
+    ini = require('node-ini'),
 
     locations = require('./craigslist_places'),
     helpers = require('./helpers'),
     csv = require('./csv'),
     mail = require('./mail');
+
+var CONFIG = ini.parseSync(__dirname + '/config.ini');
 
 // The span of time between queries. Currently happening every 10 minutes.
 var POLL_INTERVAL = 3 * 60 * 1000;
@@ -83,8 +86,13 @@ function get_posts (location) {
 
 
 function init () {
+    // The names of the locations we want to query
+    var location_names =  CONFIG.query_regions.regions;
+
     // These are all of the areas that we want to query
-    var poll_locations = _(locations).where({ query: true });
+    var poll_locations = _(locations).filter(function (location) {
+        return _(location_names).contains(location.location);
+    });
 
     poll_locations.forEach(function (location) {
         csv.load_csv(helpers.location_data_path(location)).on('end', function () {

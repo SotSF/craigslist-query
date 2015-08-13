@@ -154,8 +154,7 @@ module.exports = [
     },
     {
         "location": "monterey bay",
-        "url": "http://monterey.craigslist.org",
-        "query": true
+        "url": "http://monterey.craigslist.org"
     },
     {
         "location": "orange county",
@@ -171,8 +170,7 @@ module.exports = [
     },
     {
         "location": "sacramento",
-        "url": "http://sacramento.craigslist.org",
-        "query": true
+        "url": "http://sacramento.craigslist.org"
     },
     {
         "location": "san diego",
@@ -180,8 +178,7 @@ module.exports = [
     },
     {
         "location": "san francisco bay area",
-        "url": "http://sfbay.craigslist.org",
-        "query": true
+        "url": "http://sfbay.craigslist.org"
     },
     {
         "location": "san luis obispo",
@@ -1385,8 +1382,7 @@ module.exports = [
     },
     {
         "location": "austin",
-        "url": "http://austin.craigslist.org",
-        "query": true
+        "url": "http://austin.craigslist.org"
     },
     {
         "location": "beaumont / port arthur",
@@ -1574,8 +1570,7 @@ module.exports = [
     },
     {
         "location": "seattle-tacoma",
-        "url": "http://seattle.craigslist.org",
-        "query": true
+        "url": "http://seattle.craigslist.org"
     },
     {
         "location": "skagit / island / SJI",
