@@ -1,0 +1,19 @@
+{
+  "name": "y",
+  "version": "1.0.0",
+  "description": "",
+  "main": "poll_craigslist.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "csv": "^0.4.6",
+    "dateformat": "^1.0.11",
+    "nodemailer": "^1.4.0",
+    "scrapeit": "0.0.2",
+    "sleep": "^3.0.0",
+    "underscore": "^1.8.3"
+  }
+}
