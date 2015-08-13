@@ -1,7 +1,11 @@
 
 var fs = require('fs'),
     _ = require('underscore'),
-    nodemailer = require('nodemailer');
+    nodemailer = require('nodemailer'),
+    ini = require('node-ini');
+
+
+var CONFIG = ini.parseSync(__dirname + '/config.ini');
 
 
 /**
@@ -10,8 +14,8 @@ var fs = require('fs'),
 var transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
-        user: 'milo.toor.burningman2015@gmail.com',
-        pass: '5fcPoK5ojVxV'
+        user: CONFIG.mail.gmail_user,
+        pass: CONFIG.mail.gmail_pass
     }
 });
 
@@ -25,8 +29,8 @@ var MSG_TEMPLATE = _.template(String(fs.readFileSync(__dirname + '/new_posts.htm
  */
 function get_mail_opts (posts, location) {
     return {
-        from: 'Milo "Gonna Get a Ticket" Toor',
-        to: 'milo.toor@gmail.com',
+        from: CONFIG.mail.gmail_user,
+        to: CONFIG.mail.mailto,
         subject: posts.length + ' New Craigslist Listings!',
         html: MSG_TEMPLATE({ posts: posts, location_url: location.url })
     };
