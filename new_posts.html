@@ -1,8 +1,9 @@
 
+<h3>New posts for <%= location.location %></h3>
 <ul>
     <% posts.forEach(function (post) { %>
         <li>
-            <a href="<%= location_url %><%= post.url %>"><%= post.title %></a><br>
+            <a href="<%= location.url %><%= post.url %>"><%= post.title %></a><br>
             Posted on <%= post.timestamp %><br>
             <% if (post.price) { %>
                 Selling for <%= post.price %>

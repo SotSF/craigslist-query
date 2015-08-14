@@ -31,8 +31,8 @@ function get_mail_opts (posts, location) {
     return {
         from: CONFIG.mail.gmail_user,
         to: CONFIG.mail.mailto,
-        subject: posts.length + ' New Craigslist Listings!',
-        html: MSG_TEMPLATE({ posts: posts, location_url: location.url })
+        subject: posts.length + ' New Craigslist Listings! (' + location.location + ')',
+        html: MSG_TEMPLATE({ posts: posts, location: location })
     };
 }
 
@@ -41,6 +41,7 @@ function get_mail_opts (posts, location) {
  * Sends the given posts to me!
  *
  * @param posts
+ * @param location
  */
 exports.send_posts = function (posts, location) {
     // Get the mailing options

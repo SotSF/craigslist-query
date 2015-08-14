@@ -70,16 +70,14 @@ function get_posts (location) {
 
         // Condense the posts so we only get the ones we haven't seen before
         posts = _.compact(posts);
-        console.log(helpers.datetime() + '  -  INFO: Found ' + posts.length + ' new posts');
+        console.log(helpers.datetime() + ' (' + location.location + ')  -  INFO: Found ' + posts.length + ' new posts');
 
         // Store them all
         csv.write_csv(helpers.location_data_path(location), _.map(posts, _.values));
-        console.log(helpers.datetime() + '  -  INFO: Wrote ' + posts.length + ' posts to CSV');
 
         // Message me about them, but only if there actually are any...
         if (posts.length) {
             mail.send_posts(posts, location);
-            console.log(helpers.datetime() + '  -  INFO: Mailed ' + posts.length + ' new posts.');
         }
     });
 }
