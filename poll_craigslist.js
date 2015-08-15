@@ -44,6 +44,11 @@ function get_info_from_elem (elem) {
 function get_posts (location) {
     // Load the page
     scrape(helpers.get_location_url(location), function (error, $, dom) {
+        if (error) {
+            console.log(error);
+            return;
+        }
+
         // First of all, check for the `div.noresults` selector. If this turns something up, there
         // were no local results.
         if ($('div.noresults').length) {
