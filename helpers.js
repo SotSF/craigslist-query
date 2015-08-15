@@ -6,7 +6,7 @@ var _ = require('underscore'),
 var DATA_DIR = __dirname + '/data/';
 
 // The URL component that will follow the domain
-var CL_URL_PATH = '/search/sss?sort=rel&query=burning%20man';
+var CL_URL_PATH = '/search/tia?sort=rel&query=burning+man';
 
 
 /**
