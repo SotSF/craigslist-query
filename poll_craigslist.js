@@ -13,9 +13,6 @@ var fs = require('fs'),
 
 var CONFIG = ini.parseSync(__dirname + '/config.ini');
 
-// The span of time between queries. Currently happening every 10 minutes.
-var POLL_INTERVAL = 3 * 60 * 1000;
-
 // This is the database we use to record the posts we have already seen
 var CL_RECORD_IDS = csv.CL_RECORD_IDS;
 
@@ -106,7 +103,7 @@ function poll (location) {
     // Wait a bit then poll again
     setTimeout(function () {
         poll(location);
-    }, POLL_INTERVAL);
+    }, CONFIG.query_options.poll_interval);
 }
 
 
