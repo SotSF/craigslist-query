@@ -56,6 +56,7 @@ exports.write_csv = function (filename, records) {
     csv.stringify(records, { delimiter: '\t' }, function (err, stringified) {
         // Open and write the file
         var file_descriptor = fs.openSync(filename, 'a');
-        fs.write(file_descriptor, stringified);
+        fs.writeSync(file_descriptor, stringified);
+        fs.closeSync(file_descriptor);
     });
 };
