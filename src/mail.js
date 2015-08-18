@@ -5,7 +5,7 @@ var fs = require('fs'),
     ini = require('node-ini');
 
 
-var CONFIG = ini.parseSync(__dirname + '/config.ini');
+var CONFIG = ini.parseSync(__dirname + '/../config.ini');
 
 
 /**
@@ -21,7 +21,7 @@ var transporter = nodemailer.createTransport({
 
 
 // Build the message template for sending post updates
-var MSG_TEMPLATE = _.template(String(fs.readFileSync(__dirname + '/new_posts.html')));
+var MSG_TEMPLATE = _.template(String(fs.readFileSync(__dirname + '/../templates/new_posts.html')));
 
 
 /**

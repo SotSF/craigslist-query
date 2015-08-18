@@ -1,4 +1,3 @@
-#!/usr/local/bin/node
 
 var fs = require('fs'),
     _ = require('underscore'),
@@ -7,18 +6,15 @@ var fs = require('fs'),
     dateformat = require('dateformat'),
     ini = require('node-ini'),
 
-    locations = require('./craigslist_places'),
     helpers = require('./helpers'),
     csv = require('./csv'),
     mail = require('./mail');
-
-var CONFIG = ini.parseSync(__dirname + '/config.ini');
 
 // This is the database we use to record the posts we have already seen
 var CL_RECORD_IDS = csv.CL_RECORD_IDS;
 
 
-function get_posts (location) {
+module.exports = function (location) {
     // Load the page
     request(helpers.get_location_url(location), function (error, response, body) {
         if (error) {
@@ -73,35 +69,4 @@ function get_posts (location) {
             mail.send_posts(posts, location);
         }
     });
-}
-
-
-function init () {
-    // The names of the locations we want to query
-    var location_names =  CONFIG.query_regions.regions;
-
-    // These are all of the areas that we want to query
-    var poll_locations = _(locations).filter(function (location) {
-        return _(location_names).contains(location.location);
-    });
-
-    poll_locations.forEach(function (location) {
-        csv.load_csv(helpers.location_data_path(location)).on('end', function () {
-            poll(location);
-        });
-    });
-}
-
-
-function poll (location) {
-    get_posts(location);
-
-    // Wait a bit then poll again
-    setTimeout(function () {
-        poll(location);
-    }, CONFIG.query_options.poll_interval);
-}
-
-
-// LETS DO THIS
-init();
+};
