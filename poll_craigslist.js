@@ -2,7 +2,8 @@
 
 var fs = require('fs'),
     _ = require('underscore'),
-    scrape = require('scrapeit'),
+    request = require('request'),
+    waldo = require('waldo'),
     dateformat = require('dateformat'),
     ini = require('node-ini'),
 
@@ -17,57 +18,47 @@ var CONFIG = ini.parseSync(__dirname + '/config.ini');
 var CL_RECORD_IDS = csv.CL_RECORD_IDS;
 
 
-/**
- * Gets data from a post given the post's `p.row` element (the root element of the post)
- *
- * @param elem
- */
-function get_info_from_elem (elem) {
-    var helpers = require('./helpers');
-
-    var header_link = helpers.find_child_with_attrs(elem, 'a', { 'class': 'hdrlnk' }),
-        timestamp = helpers.find_child_with_attrs(elem, 'time'),
-        price = helpers.find_child_with_attrs(elem, 'span', { 'class': 'price' });
-
-    // Snatch the URL and the text
-    return {
-        post_id: elem.attribs['data-pid'],
-        orig_post_id: elem.attribs['data-repost-of'],
-        url: header_link.attribs.href,
-        title: header_link.children[0].raw,
-        price: price ? price.children[0].raw : null,
-        timestamp: timestamp.attribs['title']
-    };
-}
-
-
 function get_posts (location) {
     // Load the page
-    scrape(helpers.get_location_url(location), function (error, $, dom) {
+    request(helpers.get_location_url(location), function (error, response, body) {
         if (error) {
-            console.log(error);
+            console.log(location.location + ' - ' + error);
             return;
         }
 
+        // Scrape it
+        var contents = waldo.scrape(body, function () {
+            return {
+                no_results: this.find('div.noresults'),
+                posts: this.find('p.row').map(function () {
+                    var repost_id = this.$.data('repost-of');
+                    return {
+                        post_id: String(this.$.data('pid')),
+                        orig_post_id: repost_id ? String(repost_id) : null,
+                        url: this.find('a.hdrlnk').attr('href'),
+                        title: this.find('a.hdrlnk').text(),
+                        price: this.find('span.l2 > span.price').text(),
+                        timestamp: this.find('time').attr('title')
+                    }
+                })
+            };
+        });
+
         // First of all, check for the `div.noresults` selector. If this turns something up, there
         // were no local results.
-        if ($('div.noresults').length) {
+        if (contents.no_results.$.length) {
             return;
         }
 
         // OK, results were found. Search through em.
-        var posts = $('p.row').map(function (elem) {
-            // Look up some basic info from the post's header, including its id, URL, title,
-            // timestamp, etc.
-            var link_info = get_info_from_elem(elem);
-
+        var posts = contents.posts.map(function (post) {
             // If it's in the CL_RECORD_IDS object, we've seen it before
-            if (_(CL_RECORD_IDS).contains(link_info.post_id) || _(CL_RECORD_IDS).contains(link_info.orig_post_id)) {
+            if (_(CL_RECORD_IDS).contains(post.post_id) || _(CL_RECORD_IDS).contains(post.orig_post_id)) {
                 return;
             }
 
             // We haven't seen this post before!
-            return link_info;
+            return post;
         });
 
         // Condense the posts so we only get the ones we haven't seen before
