@@ -59,7 +59,9 @@ module.exports = function (location) {
 
         // Condense the posts so we only get the ones we haven't seen before
         posts = _.compact(posts);
-        console.log(helpers.datetime() + ' (' + location.location + ')  -  INFO: Found ' + posts.length + ' new posts');
+
+        var spaces = helpers.get_spacing(location);
+        console.log(helpers.datetime() + spaces + ' (' + location.location + ')' + '  INFO: Found ' + posts.length + ' new posts');
 
         // Store them all
         csv.write_csv(helpers.location_data_path(location), _.map(posts, _.values));

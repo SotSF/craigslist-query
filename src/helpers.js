@@ -1,6 +1,7 @@
 
 var _ = require('underscore'),
-    dateformat = require('dateformat');
+    dateformat = require('dateformat'),
+    ini = require('node-ini');
 
 
 var DATA_DIR = __dirname + '/../data/';
@@ -64,3 +65,22 @@ exports.get_location_url = function (location) {
 function cleanse_file_name (filename) {
     return filename.replace(/\//g, '-').replace(/ /g, '_');
 }
+
+
+// Configuration data
+var CONFIG = ini.parseSync(__dirname + '/../config.ini');
+
+// The names of the locations we want to query
+var location_names = CONFIG.query_regions.regions,
+    longest_name = location_names.reduce(function (a, b) { return a.length > b.length ? a : b; });
+
+exports.get_spacing = function (location) {
+    var num_spaces = longest_name.length - location.location.length;
+
+    var space_str = '';
+    for (var i in _.range(num_spaces)) {
+        space_str += ' ';
+    }
+
+    return space_str;
+};
