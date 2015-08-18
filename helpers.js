@@ -52,10 +52,15 @@ exports.datetime = function () {
 
 
 exports.location_data_path = function (location) {
-    return DATA_DIR + location.location.replace(/ /g, '_') + '.csv';
+    return DATA_DIR + cleanse_file_name(location.location) + '.csv';
 };
 
 
 exports.get_location_url = function (location) {
     return location.url + CL_URL_PATH;
 };
+
+
+function cleanse_file_name (filename) {
+    return filename.replace(/\//g, '-').replace(/ /g, '_');
+}
