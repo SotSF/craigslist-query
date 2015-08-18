@@ -20,9 +20,9 @@ exports.load_csv = function (filename) {
         fs.writeFileSync(filename);
     }
 
-    var file = fs.readFileSync(filename);
+    var file = fs.readFileSync(filename, { encoding: 'utf8' });
 
-    return csv.parse(String(file), { delimiter: '\t' }, function (err, records) {
+    return csv.parse(file, { delimiter: '\t' }, function (err, records) {
         // Loop through the records, adding them to the CL_RECORD_IDS object
         records.forEach(function (record) {
             CL_RECORD_IDS.push(record[0]);
